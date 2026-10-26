@@ -129,9 +129,13 @@ h1 {
 }
 
 .lead {
-  margin: 0 0 24px;
+  margin: 0 0 10px;
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+.lead:last-of-type {
+  margin-bottom: 24px;
 }
 
 .button-row {
