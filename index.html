@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="국민대학교 경영정보학부에서 마케터를 준비하는 학생의 개인 홈페이지입니다.">
-  <title>[권지민] | 마케터를 준비하는 경영정보학부 학생</title>
+  <meta name="description" content="브랜드와 콘텐츠를 중심으로, 경험을 바탕으로 한 고객 중심 마케터를 준비하는 국민대학교 경영정보학부 학생 권지민의 홈페이지입니다.">
+  <title>권지민 | 브랜드·콘텐츠 마케터를 준비하는 경영정보학부 학생</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="site-header">
-    <a class="site-name" href="#top">[권지민]</a>
+    <a class="site-name" href="#top">권지민</a>
     <nav aria-label="주요 메뉴">
       <a href="#about">소개</a>
       <a href="#works">작업</a>
@@ -21,26 +21,52 @@
 
   <main id="top">
 
-    <!-- 첫 화면: 독자와 목적이 바로 보이게 -->
-    <section class="hero">
-      <p class="eyebrow">같은 수업 동기에게</p>
-      <h1>경영정보학을 배우며<br>마케터를 준비하고 있어요</h1>
+    <!-- 첫 화면 -->
+    <section class="hero reveal">
+      <p class="eyebrow">Brand · Content Marketer</p>
+      <h1>경험을 콘텐츠로 바꾸고,<br>브랜드의 이야기를 만듭니다</h1>
       <p class="lead">
-        요즘 내가 만든 작업과 배우는 과정을 1분 안에 찾아볼 수 있게 모아 두었어요.
+        브랜드와 콘텐츠를 중심으로 공부하는 경영정보학부 학생이에요.
+        읽기만 하는 소개가 아니라, 직접 눌러보며 제 생각과 작업을 탐색할 수 있게 만들었어요.
       </p>
       <div class="button-row">
-        <a class="button" href="#works">작업 보러 가기</a>
-        <a class="button ghost" href="#about">소개 읽기</a>
+        <a class="button" href="#works">작업 탐색하기</a>
+        <a class="button ghost" href="#about">어떤 마케터인지 보기</a>
       </div>
     </section>
 
-    <section id="about">
+    <!-- 소개: 탭으로 관심사 전환 -->
+    <section id="about" class="reveal">
       <h2>소개</h2>
-      <p>
-        국민대학교 경영정보학부에 다니고 있어요. 경영과 정보기술을 함께 배우면서,
-        사람들이 무엇을 좋아하고 왜 선택하는지 이해하는 마케터가 되고 싶습니다.
-        이 페이지는 그 준비 과정을 기록하는 첫 번째 공간이에요.
-      </p>
+      <p class="section-note">관심사를 눌러서 제가 어떤 마케터를 지향하는지 확인해 보세요.</p>
+
+      <div class="tabs" role="tablist" aria-label="관심 분야">
+        <button class="tab is-active" role="tab" aria-selected="true" data-tab="brand">브랜드</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="content">콘텐츠</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="customer">고객 경험</button>
+      </div>
+
+      <div class="tab-panels">
+        <div class="tab-panel is-active" data-panel="brand">
+          <p>
+            브랜드는 로고가 아니라 사람들이 기억하는 인상이라고 생각해요.
+            왜 그 브랜드를 고르는지, 어떤 순간에 떠올리는지를 관찰하면서
+            일관된 메시지를 쌓아가는 과정에 관심이 많습니다.
+          </p>
+        </div>
+        <div class="tab-panel" data-panel="content">
+          <p>
+            좋은 콘텐츠는 정보를 전달하는 걸 넘어, 보는 사람의 하루에 작은 변화를 줘요.
+            직접 만들어 보고 반응을 관찰하면서, 읽는 사람 입장에서 다듬는 연습을 하고 있어요.
+          </p>
+        </div>
+        <div class="tab-panel" data-panel="customer">
+          <p>
+            결국 마케팅의 중심은 고객이라고 믿어요. 제가 겪은 경험과 사용자의 행동을 바탕으로,
+            사람들이 진짜로 원하는 것을 이해하는 고객 중심 마케터가 되고 싶습니다.
+          </p>
+        </div>
+      </div>
 
       <dl class="facts">
         <div>
@@ -52,79 +78,134 @@
           <dd>경영정보학부</dd>
         </div>
         <div>
-          <dt>목표</dt>
-          <dd>마케터</dd>
+          <dt>지향</dt>
+          <dd>브랜드·콘텐츠 마케터</dd>
         </div>
         <div>
-          <dt>요즘 하는 것</dt>
-          <dd>HTML, CSS, JavaScript로 직접 만들어 보기</dd>
+          <dt>목표</dt>
+          <dd>경험 기반 고객 중심 마케터</dd>
         </div>
       </dl>
     </section>
 
-    <!-- 메뉴의 href="#works" 와 id="works" 이름이 같아야 이동합니다 -->
-    <section id="works">
+    <!-- 작업: 클릭하면 펼쳐지는 카드 -->
+    <section id="works" class="reveal">
       <h2>작업</h2>
-      <p class="section-note">직접 만든 것을 눌러서 확인해 보세요.</p>
+      <p class="section-note">카드를 눌러 자세한 내용을 펼쳐 보세요.</p>
 
       <ul class="card-list">
         <li class="card">
-          <span class="tag">게임</span>
-          <h3>갤러그 슈팅 게임</h3>
-          <p>
-            HTML, CSS, JavaScript만으로 만든 아케이드 게임입니다.
-            방향키로 움직이고 Space로 발사해요. 스테이지가 올라갈수록 적이 빨라집니다.
-          </p>
-          <a href="https://merong-jojo.github.io/galage/">게임 플레이하기</a>
+          <button class="card-head" aria-expanded="false">
+            <span class="tag">게임</span>
+            <h3>갤러그 슈팅 게임</h3>
+            <span class="card-toggle" aria-hidden="true">+</span>
+          </button>
+          <div class="card-body">
+            <p>
+              HTML, CSS, JavaScript만으로 만든 아케이드 게임입니다.
+              방향키로 움직이고 Space로 발사해요. 스테이지가 올라갈수록 적이 빨라집니다.
+            </p>
+            <p class="card-note">직접 만들며 배운 점: 작은 규칙 하나가 재미를 크게 바꾼다는 것.</p>
+            <a href="https://merong-jojo.github.io/galage/">게임 플레이하기 →</a>
+          </div>
         </li>
 
         <li class="card">
-          <span class="tag">웹</span>
-          <h3>내 홈페이지</h3>
-          <p>
-            수업에서 처음으로 만든 개인 사이트입니다. 친구가 쓰는 모습을 보고
-            고친 점을 이어서 기록할 예정이에요.
-          </p>
-          <a href="#record">만든 과정 보기</a>
+          <button class="card-head" aria-expanded="false">
+            <span class="tag">웹</span>
+            <h3>내 홈페이지</h3>
+            <span class="card-toggle" aria-hidden="true">+</span>
+          </button>
+          <div class="card-body">
+            <p>
+              처음으로 만든 개인 사이트입니다. 사람들이 어떻게 보고 어디서 멈추는지를
+              관찰하면서, 읽는 사람 입장에서 구조와 문구를 계속 다듬고 있어요.
+            </p>
+            <p class="card-note">마케터 관점에서 연습: 메시지를 1분 안에 전달하기.</p>
+            <a href="#record">만든 과정 보기 →</a>
+          </div>
         </li>
       </ul>
     </section>
 
-    <section id="record">
+    <!-- 기록: 클릭 가능한 타임라인 -->
+    <section id="record" class="reveal">
       <h2>기록</h2>
+      <p class="section-note">각 단계를 눌러 자세한 이야기를 펼쳐 보세요.</p>
+
       <ol class="timeline">
         <li>
-          <strong>갤러그 게임 만들기</strong>
-          <span>HTML, CSS, JavaScript로 직접 만들어 보고 GitHub Pages에 올렸어요.</span>
+          <button class="timeline-head" aria-expanded="false">
+            <strong>갤러그 게임 만들기</strong>
+          </button>
+          <div class="timeline-body">
+            <span>HTML, CSS, JavaScript로 직접 만들어 보고 GitHub Pages에 올렸어요. 처음으로 "만든 것을 세상에 공개"해 본 경험이었습니다.</span>
+          </div>
         </li>
         <li>
-          <strong>내 홈페이지 만들기</strong>
-          <span>같은 수업 동기를 독자로 정하고 소개와 작업을 정리했어요.</span>
+          <button class="timeline-head" aria-expanded="false">
+            <strong>내 홈페이지 만들기</strong>
+          </button>
+          <div class="timeline-body">
+            <span>나를 어떻게 소개할지 고민하며 구조와 메시지를 정리했어요. 보는 사람 중심으로 생각하는 연습이 됐습니다.</span>
+          </div>
         </li>
         <li>
-          <strong>친구가 쓰는 모습 보고 고치기</strong>
-          <span>[관찰한 행동 한 줄과 고친 점을 여기에 적어 보세요.]</span>
+          <button class="timeline-head" aria-expanded="false">
+            <strong>탐색하는 페이지로 업그레이드</strong>
+          </button>
+          <div class="timeline-body">
+            <span>읽기만 하는 페이지에서, 눌러보며 탐색하는 페이지로 바꿨어요. 사용자의 행동을 끌어내는 것이 콘텐츠의 힘이라고 느꼈습니다.</span>
+          </div>
         </li>
         <li>
-          <strong>다음 목표</strong>
-          <span>[다음 주에 만들 작은 진전 한 가지를 적어 보세요.]</span>
+          <button class="timeline-head" aria-expanded="false">
+            <strong>다음 목표</strong>
+          </button>
+          <div class="timeline-body">
+            <span>실제 브랜드나 제품을 하나 정해, 고객 입장에서 콘텐츠를 기획하고 반응을 관찰하는 작은 프로젝트를 해보려고 해요.</span>
+          </div>
         </li>
       </ol>
     </section>
 
-    <section id="contact">
+    <!-- 생각: Q&A 토글 -->
+    <section id="think" class="reveal">
+      <h2>생각</h2>
+      <p class="section-note">스스로에게 던지는 질문이에요. 눌러서 답을 확인해 보세요.</p>
+
+      <div class="qa-list">
+        <details class="qa">
+          <summary>어떤 마케터가 되고 싶나요?</summary>
+          <p>경험을 바탕으로 고객을 깊이 이해하고, 브랜드의 이야기를 콘텐츠로 풀어내는 마케터가 되고 싶어요.</p>
+        </details>
+        <details class="qa">
+          <summary>왜 브랜드와 콘텐츠인가요?</summary>
+          <p>사람의 마음에 오래 남는 건 광고 한 편이 아니라, 꾸준히 쌓인 인상과 이야기라고 믿기 때문이에요.</p>
+        </details>
+        <details class="qa">
+          <summary>요즘 가장 집중하는 건?</summary>
+          <p>직접 만들고, 사람들의 반응을 관찰하고, 그걸 바탕으로 다시 다듬는 과정을 반복하는 거예요.</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="contact" class="reveal">
       <h2>연락</h2>
       <p>
-        작업이나 마케터 준비에 대해 이야기하고 싶다면 수업 시간에 편하게 말을 걸어 주세요.
+        브랜드·콘텐츠 마케팅이나 함께할 작업에 대해 이야기하고 싶다면 편하게 연락 주세요.
       </p>
-      <!-- 학번, 개인 연락처, 이메일은 공개 페이지에 쓰지 마세요 -->
+      <p class="contact-line">
+        <a class="button" href="mailto:merong@kookmin.ac.kr">merong@kookmin.ac.kr</a>
+      </p>
     </section>
 
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 [권지민] · 국민대학교 경영정보학부</p>
+    <p>© 2026 권지민 · 국민대학교 경영정보학부</p>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>

@@ -313,3 +313,237 @@ h2 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ===== 인터랙티브 업그레이드 ===== */
+
+/* 스크롤 등장 애니메이션 */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* 소개 탭 */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 0;
+}
+
+.tab {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tab:hover {
+  border-color: var(--gold);
+  color: var(--accent);
+}
+
+.tab.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.tab-panels {
+  margin-top: 14px;
+}
+
+.tab-panel {
+  display: none;
+  padding: 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  animation: fade-in 0.3s ease;
+}
+
+.tab-panel.is-active {
+  display: block;
+}
+
+.tab-panel p {
+  margin: 0;
+  color: var(--text);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* 작업 카드: 펼치기 */
+.card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.card-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.card-head h3 {
+  margin: 0;
+  flex: 1;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.card-toggle {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.card-body {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 20px;
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+.card.is-open .card-body {
+  max-height: 320px;
+  opacity: 1;
+  padding: 0 20px 20px;
+}
+
+.card-note {
+  color: var(--holly) !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+/* 기록 타임라인: 펼치기 */
+.timeline-head {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  width: 100%;
+}
+
+.timeline-head strong {
+  color: var(--accent);
+  transition: color 0.15s ease;
+}
+
+.timeline-head:hover strong {
+  color: var(--accent-strong);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 4px;
+}
+
+.timeline-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.timeline li.is-open .timeline-body {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 4px;
+}
+
+/* 생각: Q&A 토글 */
+.qa-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.qa {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+}
+
+.qa summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qa summary::-webkit-details-marker {
+  display: none;
+}
+
+.qa summary::before {
+  content: "Q";
+  width: 24px;
+  height: 24px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--holly-soft);
+  color: var(--holly);
+  border-radius: 50%;
+  font-size: 0.85rem;
+}
+
+.qa[open] summary::before {
+  background: var(--accent);
+  color: #fff;
+}
+
+.qa p {
+  margin: 12px 0 0 34px;
+  color: var(--text);
+}
+
+/* 연락 */
+.contact-line {
+  margin-top: 16px;
+}
