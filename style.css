@@ -712,3 +712,25 @@ h2::after {
   .button::before,
   .sparkle { animation: none; }
 }
+
+/* 히어로 이름 */
+.hero-name {
+  margin: 0 0 6px;
+  color: #fff;
+  font-size: clamp(2.2rem, 8vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-name-en {
+  color: var(--gold);
+  font-size: clamp(1rem, 3.5vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
