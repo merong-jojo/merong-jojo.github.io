@@ -738,3 +738,51 @@ h2::after {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* 노션 연결 */
+.nav-notion {
+  color: var(--accent) !important;
+  font-weight: 700;
+}
+
+.nav-notion:hover {
+  border-bottom-color: var(--gold) !important;
+}
+
+/* 노션 포트폴리오 카드 (바로 링크) */
+.card-link {
+  border-top-color: var(--holly);
+}
+
+.card-link-inner {
+  display: block;
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-link-inner h3 {
+  margin: 8px 0;
+  color: var(--accent);
+}
+
+.card-link-inner p {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+
+.tag-notion {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.card-cta {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--holly);
+  transition: transform 0.15s ease;
+}
+
+.card-link:hover .card-cta {
+  transform: translateX(4px);
+}
