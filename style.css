@@ -1,12 +1,18 @@
-/* 색을 바꾸려면 아래 --accent 한 줄만 고치고 저장 → 새로고침 */
+/* 버건디 × 크리스마스 색 팔레트
+   포인트 색을 바꾸려면 --accent(버건디)와 --holly(그린)를 고치세요 */
 :root {
-  --accent: #1f4fb5;
-  --accent-soft: #e6edfb;
-  --bg: #f7f8fc;
-  --text: #1c2233;
-  --muted: #5a6280;
+  --accent: #7b1e2b;        /* 메인 버건디 */
+  --accent-strong: #5c141f; /* 진한 버건디 (호버) */
+  --accent-soft: #f6e7e9;   /* 연한 버건디 배경 */
+  --holly: #1f6b43;         /* 크리스마스 그린 */
+  --holly-soft: #e6f1ea;    /* 연한 그린 배경 */
+  --gold: #c99a2e;          /* 따뜻한 골드 포인트 */
+  --bg: #fbf6f2;            /* 아이보리 배경 */
+  --text: #2a1b1d;          /* 짙은 와인 브라운 텍스트 */
+  --muted: #7a6567;         /* 부드러운 보조 텍스트 */
   --card: #ffffff;
-  --border: #dde1ee;
+  --border: #ecdcdc;
+  --shadow: 0 6px 18px rgba(123, 30, 43, 0.08);
 }
 
 * {
@@ -46,12 +52,17 @@ a:focus-visible {
   padding: 14px 20px;
   background: var(--card);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 10px rgba(123, 30, 43, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .site-name {
   font-weight: 700;
-  color: var(--text);
+  color: var(--accent);
   text-decoration: none;
+  letter-spacing: 0.01em;
 }
 
 nav {
@@ -65,10 +76,12 @@ nav a {
   text-decoration: none;
   padding: 4px 2px;
   border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 nav a:hover {
-  border-bottom-color: var(--accent);
+  color: var(--accent);
+  border-bottom-color: var(--gold);
 }
 
 main {
@@ -84,14 +97,29 @@ section {
 
 /* 첫 화면 */
 .hero {
-  padding: 56px 0 16px;
+  margin-top: 28px;
+  padding: 48px 28px 40px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  border-radius: 18px;
+  color: #fff8f3;
+  box-shadow: var(--shadow);
+}
+
+.hero h1 {
+  color: #fff;
+}
+
+.hero .lead {
+  color: rgba(255, 248, 243, 0.85);
 }
 
 .eyebrow {
-  margin: 0 0 8px;
-  color: var(--accent);
+  margin: 0 0 10px;
+  color: var(--gold);
   font-weight: 700;
   font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 h1 {
@@ -114,27 +142,39 @@ h1 {
 
 .button {
   display: inline-block;
-  padding: 10px 20px;
-  background: var(--accent);
-  color: #fff;
+  padding: 11px 22px;
+  background: var(--gold);
+  color: #3a2a06;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 700;
-  border: 2px solid var(--accent);
+  border: 2px solid var(--gold);
+  transition: transform 0.12s ease, filter 0.12s ease;
 }
 
 .button:hover {
-  filter: brightness(1.12);
+  filter: brightness(1.06);
+  transform: translateY(-1px);
 }
 
 .button.ghost {
   background: transparent;
-  color: var(--accent);
+  color: #fff8f3;
+  border-color: rgba(255, 248, 243, 0.55);
+}
+
+.button.ghost:hover {
+  background: rgba(255, 248, 243, 0.12);
+  filter: none;
 }
 
 h2 {
   margin: 0 0 8px;
   font-size: 1.5rem;
+  color: var(--accent);
+  display: inline-block;
+  padding-bottom: 6px;
+  border-bottom: 3px solid var(--gold);
 }
 
 .section-note {
@@ -153,7 +193,12 @@ h2 {
   padding: 12px 16px;
   background: var(--card);
   border: 1px solid var(--border);
+  border-left: 4px solid var(--holly);
   border-radius: 10px;
+}
+
+.facts dd {
+  color: var(--accent);
 }
 
 .facts dt {
@@ -176,10 +221,22 @@ h2 {
 }
 
 .card {
-  padding: 18px;
+  padding: 20px;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-top: 4px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(123, 30, 43, 0.14);
+}
+
+.card h3 {
+  color: var(--accent);
 }
 
 .card h3 {
@@ -197,9 +254,9 @@ h2 {
 
 .tag {
   display: inline-block;
-  padding: 2px 10px;
-  background: var(--accent-soft);
-  color: var(--accent);
+  padding: 3px 12px;
+  background: var(--holly-soft);
+  color: var(--holly);
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 700;
@@ -210,7 +267,7 @@ h2 {
   list-style: none;
   margin: 16px 0 0;
   padding: 0 0 0 20px;
-  border-left: 3px solid var(--accent-soft);
+  border-left: 3px solid var(--holly-soft);
 }
 
 .timeline li {
@@ -226,11 +283,13 @@ h2 {
   width: 12px;
   height: 12px;
   background: var(--accent);
+  border: 2px solid var(--gold);
   border-radius: 50%;
 }
 
 .timeline strong {
   display: block;
+  color: var(--accent);
 }
 
 .timeline span {
