@@ -59,3 +59,28 @@ if ("IntersectionObserver" in window) {
   // IntersectionObserver를 지원하지 않는 환경에서는 바로 보이게
   revealEls.forEach((el) => el.classList.add("is-visible"));
 }
+
+// 마우스를 따라다니는 반짝임 효과
+(function () {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return;
+
+  const sparkles = ["✦", "✧", "❄", "✨", "⭐"];
+  let last = 0;
+
+  document.addEventListener("pointermove", (e) => {
+    const now = Date.now();
+    if (now - last < 90) return; // 너무 자주 생기지 않게 조절
+    last = now;
+
+    const s = document.createElement("span");
+    s.className = "sparkle";
+    s.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+    s.style.left = e.clientX + "px";
+    s.style.top = e.clientY + "px";
+    s.style.color = Math.random() > 0.5 ? "#c99a2e" : "#7b1e2b";
+    document.body.appendChild(s);
+
+    setTimeout(() => s.remove(), 800);
+  });
+})();

@@ -547,3 +547,168 @@ h2 {
 .contact-line {
   margin-top: 16px;
 }
+
+/* ===== 귀여운 꾸밈 요소 ===== */
+
+/* 히어로 안에 떠다니는 장식(눈/별) */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-decor span {
+  position: absolute;
+  top: -10%;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+  animation: drift linear infinite;
+}
+
+.hero-decor span:nth-child(1) { left: 8%;  font-size: 0.8rem; animation-duration: 9s;  animation-delay: 0s; }
+.hero-decor span:nth-child(2) { left: 22%; font-size: 1.1rem; animation-duration: 12s; animation-delay: 1.5s; color: rgba(201,154,46,0.6); }
+.hero-decor span:nth-child(3) { left: 38%; font-size: 0.7rem; animation-duration: 8s;  animation-delay: 3s; }
+.hero-decor span:nth-child(4) { left: 55%; font-size: 1rem;   animation-duration: 11s; animation-delay: 0.8s; }
+.hero-decor span:nth-child(5) { left: 70%; font-size: 0.85rem; animation-duration: 10s; animation-delay: 2.2s; color: rgba(201,154,46,0.6); }
+.hero-decor span:nth-child(6) { left: 85%; font-size: 1.05rem; animation-duration: 13s; animation-delay: 4s; }
+.hero-decor span:nth-child(7) { left: 92%; font-size: 0.75rem; animation-duration: 9.5s; animation-delay: 1s; }
+
+@keyframes drift {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(420px) rotate(220deg); opacity: 0; }
+}
+
+/* 섹션 제목 옆 귀여운 포인트 이모지 */
+h2 {
+  position: relative;
+}
+
+h2::after {
+  margin-left: 8px;
+  font-size: 1.1rem;
+  border: none;
+}
+
+#about h2::after   { content: "🎀"; }
+#works h2::after   { content: "✨"; }
+#record h2::after  { content: "🎄"; }
+#think h2::after   { content: "💭"; }
+#contact h2::after { content: "💌"; }
+
+/* 이름 로고 옆 작은 반짝임 */
+.site-name::after {
+  content: "✦";
+  margin-left: 6px;
+  color: var(--gold);
+  font-size: 0.8em;
+  display: inline-block;
+  animation: twinkle 2.4s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.9) rotate(0deg); }
+  50%      { opacity: 1;   transform: scale(1.15) rotate(20deg); }
+}
+
+/* 탭 버튼 호버 시 살짝 통통 */
+.tab:hover {
+  transform: translateY(-2px);
+}
+
+/* 카드 토글 버튼 호버 시 깜찍하게 회전 */
+.card-head:hover .card-toggle {
+  transform: rotate(90deg) scale(1.1);
+  transition: transform 0.2s ease;
+  background: var(--gold);
+  color: #3a2a06;
+}
+
+/* 작업 카드 위 작은 리본 점선 포인트 */
+.card {
+  position: relative;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(201, 154, 46, 0.2);
+}
+
+/* Q&A 열릴 때 살짝 통 */
+.qa[open] {
+  animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(0.99); }
+  60%  { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+
+/* 버튼 호버 시 반짝 스윕 */
+.button {
+  position: relative;
+  overflow: hidden;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+}
+
+.button:hover::before {
+  left: 130%;
+}
+
+/* 푸터에 작은 하트 */
+.site-footer p::before {
+  content: "❤ ";
+  color: var(--accent);
+}
+
+/* 마우스를 따라다니는 반짝임 */
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  font-size: 14px;
+  animation: sparkle-fade 0.8s ease forwards;
+}
+
+@keyframes sparkle-fade {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-50%, -90%) scale(0.3) rotate(90deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-decor span,
+  .site-name::after,
+  .button::before,
+  .sparkle { animation: none; }
+}
