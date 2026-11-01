@@ -738,3 +738,15 @@ h2::after {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* 다음 프로젝트 예정 카드 */
+.card-upcoming {
+  border-top-color: var(--gold);
+  border-style: dashed;
+  background: #fffdf8;
+}
+
+.tag-upcoming {
+  background: #faf0d7;
+  color: var(--gold);
+}
