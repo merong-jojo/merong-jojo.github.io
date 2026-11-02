@@ -10,14 +10,14 @@
 # 원본은 저장소 루트에 그대로 두어 기존 GitHub Pages도 영향받지 않습니다.
 
 [build]
-  # 1) 함수 의존성 설치(@supabase/supabase-js)  2) 공개 자산만 publish/ 로 복사
-  command = "npm install && bash ./scripts/build-publish.sh"
+  # 공개 자산만 publish/ 로 복사. 서버 함수는 외부 의존성이 없어 설치 단계가 필요 없음.
+  command = "bash ./scripts/build-publish.sh"
   publish = "publish"
   # 서버 함수 위치
   functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 # /api/guestbook 로 들어오는 요청을 guestbook 함수로 연결
 [[redirects]]

@@ -8,11 +8,14 @@
 // 비밀 키가 RLS를 우회하기 때문에, 데이터 검증(이름/메시지 길이 등)의 책임은
 // 이 서버 함수가 집니다. (아래 validate 참고)
 //
+// 구현 메모: supabase-js 클라이언트 라이브러리 대신 Supabase의 REST(PostgREST)
+// 엔드포인트를 Node 내장 fetch로 직접 호출합니다. 서버 함수에는 realtime(WebSocket)이
+// 필요 없고, 라이브러리의 WebSocket 초기화가 일부 Node 런타임에서 실패하기 때문입니다.
+// 이렇게 하면 외부 의존성 없이 insert/select만 가볍게 수행합니다.
+//
 // 필요한 환경변수 (Netlify 대시보드 → Site configuration → Environment variables):
 //   - SUPABASE_URL                : Supabase 프로젝트 URL
 //   - SUPABASE_SERVICE_ROLE_KEY   : Supabase service_role 키 (비밀. 절대 코드/깃에 넣지 않음)
-
-const { createClient } = require("@supabase/supabase-js");
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -37,28 +40,40 @@ function validate(name, message) {
   return null;
 }
 
+// Supabase REST 공통 헤더 (service_role 키로 RLS 우회)
+function restHeaders(extra) {
+  return Object.assign(
+    {
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: "Bearer " + SERVICE_ROLE_KEY,
+    },
+    extra || {}
+  );
+}
+
 exports.handler = async (event) => {
   // 환경변수가 없으면 서버 설정 문제
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
     return json(500, { error: "서버에 Supabase 설정이 없습니다. 환경변수를 확인하세요." });
   }
 
-  const client = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
-    auth: { persistSession: false },
-  });
+  const base = SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/guestbook";
 
   // ---------- 목록 조회 ----------
   if (event.httpMethod === "GET") {
-    const { data, error } = await client
-      .from("guestbook")
-      .select("name, message, created_at")
-      .order("created_at", { ascending: false })
-      .limit(30);
-
-    if (error) {
+    try {
+      const url =
+        base +
+        "?select=name,message,created_at&order=created_at.desc&limit=30";
+      const res = await fetch(url, { headers: restHeaders() });
+      if (!res.ok) {
+        return json(500, { error: "방명록을 불러오지 못했어요." });
+      }
+      const items = await res.json();
+      return json(200, { items });
+    } catch {
       return json(500, { error: "방명록을 불러오지 못했어요." });
     }
-    return json(200, { items: data });
   }
 
   // ---------- 저장 ----------
@@ -78,14 +93,22 @@ exports.handler = async (event) => {
       return json(400, { error: invalid });
     }
 
-    const { error } = await client
-      .from("guestbook")
-      .insert({ name: name.trim(), message: message.trim() });
-
-    if (error) {
+    try {
+      const res = await fetch(base, {
+        method: "POST",
+        headers: restHeaders({
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        }),
+        body: JSON.stringify({ name: name.trim(), message: message.trim() }),
+      });
+      if (!res.ok) {
+        return json(500, { error: "저장에 실패했어요. 잠시 후 다시 시도해 주세요." });
+      }
+      return json(201, { ok: true });
+    } catch {
       return json(500, { error: "저장에 실패했어요. 잠시 후 다시 시도해 주세요." });
     }
-    return json(201, { ok: true });
   }
 
   return json(405, { error: "지원하지 않는 메서드예요." });
