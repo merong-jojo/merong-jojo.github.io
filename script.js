@@ -85,7 +85,7 @@ if ("IntersectionObserver" in window) {
   });
 })();
 
-// ===== Supabase 연동 (좋아요 + 방명록) =====
+// ===== 좋아요 (브라우저 → Supabase 직접, anon public 키) =====
 (function () {
   const cfg = window.SUPABASE_CONFIG || {};
   const configured =
@@ -96,13 +96,8 @@ if ("IntersectionObserver" in window) {
 
   const likeButton = document.getElementById("like-button");
   const likeCountEl = document.getElementById("like-count");
-  const gbForm = document.getElementById("guestbook-form");
-  const gbList = document.getElementById("guestbook-list");
-  const gbEmpty = document.getElementById("guestbook-empty");
-  const gbStatus = document.getElementById("gb-status");
-  const gbSubmit = document.getElementById("gb-submit");
 
-  // 설정이 아직 안 됐으면 사용자에게 부드럽게 안내하고 중단
+  // 설정이 아직 안 됐으면 좋아요만 안내하고 중단 (방명록은 아래 별도 블록에서 동작)
   if (!configured || !window.supabase) {
     if (likeCountEl) likeCountEl.textContent = "–";
     if (likeButton) {
@@ -110,10 +105,6 @@ if ("IntersectionObserver" in window) {
         alert("좋아요 기능은 Supabase 설정 후 작동해요. (supabase-config.js에 URL과 키를 넣어 주세요.)");
       });
     }
-    if (gbStatus) {
-      gbStatus.textContent = "방명록은 Supabase 설정 후 작동해요.";
-    }
-    if (gbSubmit) gbSubmit.disabled = true;
     return;
   }
 
@@ -155,8 +146,18 @@ if ("IntersectionObserver" in window) {
     likeButton.addEventListener("click", addLike);
     loadLikes();
   }
+})();
 
-  // ---------- 방명록 ----------
+// ===== 방명록 (브라우저 → Netlify Function → Supabase) =====
+// 브라우저는 Supabase에 직접 접근하지 않고 /api/guestbook 서버 함수를 거칩니다.
+// 따라서 supabase-config.js 설정 여부와 무관하게 동작합니다.
+(function () {
+  const gbForm = document.getElementById("guestbook-form");
+  const gbList = document.getElementById("guestbook-list");
+  const gbEmpty = document.getElementById("guestbook-empty");
+  const gbStatus = document.getElementById("gb-status");
+  const gbSubmit = document.getElementById("gb-submit");
+
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, (c) => ({
       "&": "&amp;",
@@ -201,18 +202,21 @@ if ("IntersectionObserver" in window) {
     });
   }
 
+  // 방명록은 서버 함수(/api/guestbook)를 거칩니다. (브라우저 → 함수 → Supabase)
   async function loadGuestbook() {
-    const { data, error } = await client
-      .from("guestbook")
-      .select("name, message, created_at")
-      .order("created_at", { ascending: false })
-      .limit(30);
-    if (error) {
-      console.error("방명록 불러오기 실패:", error.message);
+    try {
+      const res = await fetch("/api/guestbook", { method: "GET" });
+      const body = await res.json();
+      if (!res.ok) {
+        console.error("방명록 불러오기 실패:", body.error);
+        if (gbStatus) gbStatus.textContent = "방명록을 불러오지 못했어요.";
+        return;
+      }
+      renderMessages(body.items);
+    } catch (err) {
+      console.error("방명록 불러오기 실패:", err.message);
       if (gbStatus) gbStatus.textContent = "방명록을 불러오지 못했어요.";
-      return;
     }
-    renderMessages(data);
   }
 
   async function submitGuestbook(e) {
@@ -230,18 +234,26 @@ if ("IntersectionObserver" in window) {
     if (gbSubmit) gbSubmit.disabled = true;
     if (gbStatus) gbStatus.textContent = "남기는 중...";
 
-    const { error } = await client
-      .from("guestbook")
-      .insert({ name, message });
+    try {
+      const res = await fetch("/api/guestbook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message }),
+      });
+      const body = await res.json();
 
-    if (error) {
-      console.error("방명록 저장 실패:", error.message);
+      if (!res.ok) {
+        console.error("방명록 저장 실패:", body.error);
+        if (gbStatus) gbStatus.textContent = body.error || "저장에 실패했어요. 잠시 후 다시 시도해 주세요.";
+      } else {
+        if (gbStatus) gbStatus.textContent = "남겨 주셔서 고마워요!";
+        nameEl.value = "";
+        msgEl.value = "";
+        await loadGuestbook();
+      }
+    } catch (err) {
+      console.error("방명록 저장 실패:", err.message);
       if (gbStatus) gbStatus.textContent = "저장에 실패했어요. 잠시 후 다시 시도해 주세요.";
-    } else {
-      if (gbStatus) gbStatus.textContent = "남겨 주셔서 고마워요!";
-      nameEl.value = "";
-      msgEl.value = "";
-      await loadGuestbook();
     }
     if (gbSubmit) gbSubmit.disabled = false;
   }

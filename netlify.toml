@@ -1,21 +1,29 @@
 # Netlify 배포 설정
 #
-# 이 사이트는 빌드 과정이 없는 순수 정적 사이트(HTML/CSS/JS)입니다.
-# 방명록은 브라우저에서 Supabase로 직접 요청하므로 서버 함수(Netlify Functions)가
-# 필요 없습니다. anon public 키는 공개 전제 키이며 데이터 보호는 Supabase RLS가 담당합니다.
-# → 따라서 functions 디렉터리를 두지 않습니다. (서버 함수를 공개 폴더에 복사하지 않음)
+# 구조: 브라우저 → Netlify Function(netlify/functions) → Supabase
+# 방명록 저장/조회는 브라우저가 Supabase에 직접 접근하지 않고, 서버 함수를 거칩니다.
+# 서버 함수는 RLS를 우회하는 service_role 키(환경변수)를 사용하므로 공개 폴더에
+# 복사하지 않으며, 입력 검증 책임을 함수가 집니다.
 #
-# 원본 파일은 저장소 루트에 그대로 둡니다. 기존 GitHub Pages(루트 index.html 서빙)는
-# 영향받지 않습니다. Netlify는 아래 build 단계로 공개 자산만 publish 디렉터리에 모아 배포합니다.
+# 공개 자산(HTML/CSS/브라우저 JS)만 publish/ 로 모아 배포하고,
+# 서버 함수는 publish/ 에 복사하지 않습니다. (build-publish.sh 참고)
+# 원본은 저장소 루트에 그대로 두어 기존 GitHub Pages도 영향받지 않습니다.
 
 [build]
-  # 공개할 자산만 publish/ 로 복사 (HTML/CSS/브라우저 JS). Node/npm 불필요.
-  command = "bash ./scripts/build-publish.sh"
+  # 1) 함수 의존성 설치(@supabase/supabase-js)  2) 공개 자산만 publish/ 로 복사
+  command = "npm install && bash ./scripts/build-publish.sh"
   publish = "publish"
+  # 서버 함수 위치
+  functions = "netlify/functions"
 
 [build.environment]
-  # 빌드에 Node가 필요 없음을 명시 (정적 복사만 수행)
   NODE_VERSION = "20"
+
+# /api/guestbook 로 들어오는 요청을 guestbook 함수로 연결
+[[redirects]]
+  from = "/api/guestbook"
+  to = "/.netlify/functions/guestbook"
+  status = 200
 
 # 캐시 및 기본 헤더 (선택적 보안 헤더)
 [[headers]]

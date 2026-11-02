@@ -6,7 +6,8 @@
 # 따라서 .git, .env, .kiro, docs(개인 기록), node_modules,
 # 서버 설정/비밀 코드(supabase-setup.sql 등), 임시 파일은 자동으로 제외됩니다.
 #
-# 서버 함수는 복사하지 않습니다 (이 사이트에는 서버 함수가 없음).
+# 서버 함수(netlify/functions)는 publish/ 에 복사하지 않습니다.
+# Netlify가 functions 디렉터리에서 별도로 빌드/배포하며, 공개 폴더에 노출되면 안 됩니다.
 
 set -euo pipefail
 
