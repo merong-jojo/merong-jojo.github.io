@@ -750,3 +750,36 @@ h2::after {
   background: #faf0d7;
   color: var(--gold);
 }
+
+/* 활동 섹션 태그 */
+.tag-activity {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* 준비 중(비활성) 버튼 */
+.button-disabled {
+  background: #efe7e0;
+  color: var(--muted);
+  border-color: #e2d6cc;
+  cursor: not-allowed;
+  font-weight: 700;
+}
+
+.button-disabled:hover {
+  filter: none;
+  transform: none;
+}
+
+/* 비활성 버튼은 반짝 스윕 효과 제거 */
+.button-disabled::before {
+  display: none;
+}
+
+/* 활동 카드 기간 표시 */
+.card-period {
+  color: var(--holly) !important;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+}
