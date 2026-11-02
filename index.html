@@ -17,6 +17,7 @@
       <a href="#activity">활동</a>
       <a href="#record">기록</a>
       <a href="#contact">연락</a>
+      <a href="#guestbook">방명록</a>
     </nav>
   </header>
 
@@ -35,6 +36,14 @@
       <div class="button-row">
         <a class="button" href="#works">작업 탐색하기</a>
         <a class="button ghost" href="#about">어떤 마케터인지 보기</a>
+      </div>
+      <div class="like-box">
+        <button type="button" id="like-button" class="like-button" aria-label="이 페이지에 좋아요">
+          <span class="like-heart" aria-hidden="true">♥</span>
+          <span class="like-text">좋아요</span>
+          <span class="like-count" id="like-count" aria-live="polite">–</span>
+        </button>
+        <p class="like-note">마음에 들면 눌러주세요. 반응이 실시간으로 쌓여요.</p>
       </div>
     </section>
 
@@ -244,12 +253,40 @@
       </p>
     </section>
 
+    <!-- 방명록: Supabase에 저장/조회 -->
+    <section id="guestbook" class="reveal">
+      <h2>방명록</h2>
+      <p class="section-note">다녀간 흔적을 남겨 주세요. 남겨주신 글은 바로 아래에 쌓입니다.</p>
+
+      <form id="guestbook-form" class="guestbook-form" autocomplete="off">
+        <div class="field">
+          <label for="gb-name">이름</label>
+          <input type="text" id="gb-name" name="name" maxlength="40" required placeholder="이름 또는 닉네임">
+        </div>
+        <div class="field">
+          <label for="gb-message">메시지</label>
+          <textarea id="gb-message" name="message" maxlength="500" rows="3" required placeholder="남기고 싶은 말을 적어 주세요 (최대 500자)"></textarea>
+        </div>
+        <div class="guestbook-actions">
+          <button type="submit" class="button" id="gb-submit">남기기</button>
+          <span class="guestbook-status" id="gb-status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+
+      <ul class="guestbook-list" id="guestbook-list" aria-live="polite">
+        <li class="guestbook-empty" id="guestbook-empty">아직 남겨진 메시지가 없어요. 첫 메시지를 남겨 보세요!</li>
+      </ul>
+    </section>
+
   </main>
 
   <footer class="site-footer">
     <p>© 2026 권지민 · 국민대학교 경영정보학부</p>
   </footer>
 
+  <!-- Supabase 클라이언트 (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

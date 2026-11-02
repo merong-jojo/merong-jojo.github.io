@@ -84,3 +84,170 @@ if ("IntersectionObserver" in window) {
     setTimeout(() => s.remove(), 800);
   });
 })();
+
+// ===== Supabase 연동 (좋아요 + 방명록) =====
+(function () {
+  const cfg = window.SUPABASE_CONFIG || {};
+  const configured =
+    cfg.url &&
+    cfg.anonKey &&
+    !cfg.url.includes("여기에") &&
+    !cfg.anonKey.includes("여기에");
+
+  const likeButton = document.getElementById("like-button");
+  const likeCountEl = document.getElementById("like-count");
+  const gbForm = document.getElementById("guestbook-form");
+  const gbList = document.getElementById("guestbook-list");
+  const gbEmpty = document.getElementById("guestbook-empty");
+  const gbStatus = document.getElementById("gb-status");
+  const gbSubmit = document.getElementById("gb-submit");
+
+  // 설정이 아직 안 됐으면 사용자에게 부드럽게 안내하고 중단
+  if (!configured || !window.supabase) {
+    if (likeCountEl) likeCountEl.textContent = "–";
+    if (likeButton) {
+      likeButton.addEventListener("click", () => {
+        alert("좋아요 기능은 Supabase 설정 후 작동해요. (supabase-config.js에 URL과 키를 넣어 주세요.)");
+      });
+    }
+    if (gbStatus) {
+      gbStatus.textContent = "방명록은 Supabase 설정 후 작동해요.";
+    }
+    if (gbSubmit) gbSubmit.disabled = true;
+    return;
+  }
+
+  const client = window.supabase.createClient(cfg.url, cfg.anonKey);
+
+  // ---------- 좋아요 ----------
+  async function loadLikes() {
+    const { data, error } = await client
+      .from("likes")
+      .select("count")
+      .eq("id", 1)
+      .single();
+    if (error) {
+      console.error("좋아요 불러오기 실패:", error.message);
+      return;
+    }
+    if (likeCountEl) likeCountEl.textContent = data.count;
+  }
+
+  async function addLike() {
+    if (!likeButton) return;
+    likeButton.disabled = true;
+    // 낙관적 업데이트: 눌리자마자 숫자부터 올림
+    const prev = parseInt(likeCountEl.textContent, 10);
+    if (!Number.isNaN(prev)) likeCountEl.textContent = prev + 1;
+    likeButton.classList.add("is-liked");
+
+    const { data, error } = await client.rpc("increment_likes");
+    if (error) {
+      console.error("좋아요 실패:", error.message);
+      if (!Number.isNaN(prev)) likeCountEl.textContent = prev; // 롤백
+    } else if (typeof data === "number") {
+      likeCountEl.textContent = data; // 서버 실제 값으로 보정
+    }
+    likeButton.disabled = false;
+  }
+
+  if (likeButton) {
+    likeButton.addEventListener("click", addLike);
+    loadLikes();
+  }
+
+  // ---------- 방명록 ----------
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    }[c]));
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
+  function renderMessages(rows) {
+    if (!gbList) return;
+    // 기존 메시지 항목 제거 (빈 안내는 제어용으로 둠)
+    gbList.querySelectorAll(".guestbook-item").forEach((el) => el.remove());
+
+    if (!rows || rows.length === 0) {
+      if (gbEmpty) gbEmpty.style.display = "";
+      return;
+    }
+    if (gbEmpty) gbEmpty.style.display = "none";
+
+    rows.forEach((row) => {
+      const li = document.createElement("li");
+      li.className = "guestbook-item";
+      li.innerHTML =
+        '<div class="gb-head">' +
+        '<span class="gb-name">' + escapeHtml(row.name) + "</span>" +
+        '<span class="gb-date">' + formatDate(row.created_at) + "</span>" +
+        "</div>" +
+        '<p class="gb-message">' + escapeHtml(row.message) + "</p>";
+      gbList.appendChild(li);
+    });
+  }
+
+  async function loadGuestbook() {
+    const { data, error } = await client
+      .from("guestbook")
+      .select("name, message, created_at")
+      .order("created_at", { ascending: false })
+      .limit(30);
+    if (error) {
+      console.error("방명록 불러오기 실패:", error.message);
+      if (gbStatus) gbStatus.textContent = "방명록을 불러오지 못했어요.";
+      return;
+    }
+    renderMessages(data);
+  }
+
+  async function submitGuestbook(e) {
+    e.preventDefault();
+    const nameEl = document.getElementById("gb-name");
+    const msgEl = document.getElementById("gb-message");
+    const name = nameEl.value.trim();
+    const message = msgEl.value.trim();
+
+    if (!name || !message) {
+      if (gbStatus) gbStatus.textContent = "이름과 메시지를 모두 입력해 주세요.";
+      return;
+    }
+
+    if (gbSubmit) gbSubmit.disabled = true;
+    if (gbStatus) gbStatus.textContent = "남기는 중...";
+
+    const { error } = await client
+      .from("guestbook")
+      .insert({ name, message });
+
+    if (error) {
+      console.error("방명록 저장 실패:", error.message);
+      if (gbStatus) gbStatus.textContent = "저장에 실패했어요. 잠시 후 다시 시도해 주세요.";
+    } else {
+      if (gbStatus) gbStatus.textContent = "남겨 주셔서 고마워요!";
+      nameEl.value = "";
+      msgEl.value = "";
+      await loadGuestbook();
+    }
+    if (gbSubmit) gbSubmit.disabled = false;
+  }
+
+  if (gbForm) {
+    gbForm.addEventListener("submit", submitGuestbook);
+    loadGuestbook();
+  }
+})();

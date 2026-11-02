@@ -1,0 +1,25 @@
+# Netlify 배포 설정
+#
+# 이 사이트는 빌드 과정이 없는 순수 정적 사이트(HTML/CSS/JS)입니다.
+# 방명록은 브라우저에서 Supabase로 직접 요청하므로 서버 함수(Netlify Functions)가
+# 필요 없습니다. anon public 키는 공개 전제 키이며 데이터 보호는 Supabase RLS가 담당합니다.
+# → 따라서 functions 디렉터리를 두지 않습니다. (서버 함수를 공개 폴더에 복사하지 않음)
+#
+# 원본 파일은 저장소 루트에 그대로 둡니다. 기존 GitHub Pages(루트 index.html 서빙)는
+# 영향받지 않습니다. Netlify는 아래 build 단계로 공개 자산만 publish 디렉터리에 모아 배포합니다.
+
+[build]
+  # 공개할 자산만 publish/ 로 복사 (HTML/CSS/브라우저 JS). Node/npm 불필요.
+  command = "bash ./scripts/build-publish.sh"
+  publish = "publish"
+
+[build.environment]
+  # 빌드에 Node가 필요 없음을 명시 (정적 복사만 수행)
+  NODE_VERSION = "20"
+
+# 캐시 및 기본 헤더 (선택적 보안 헤더)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

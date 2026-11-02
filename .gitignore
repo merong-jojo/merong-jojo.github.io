@@ -1,0 +1,21 @@
+# Netlify 빌드 산출물 (공개 자산 복사본)
+publish/
+
+# 의존성 (현재 없음, 향후 대비)
+node_modules/
+
+# 환경 변수 / 비밀
+.env
+.env.*
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+
+# 개인 작업 기록 / 설정 (공개 저장소에 올리지 않음)
+.kiro/
+docs/
+
+# 작업용 임시 파일
+_c.txt
+chk.txt
