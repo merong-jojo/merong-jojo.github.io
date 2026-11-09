@@ -9,6 +9,11 @@
 </head>
 <body>
 
+  <!-- 스크롤 진행 표시줄 -->
+  <div class="scroll-progress" aria-hidden="true">
+    <span class="scroll-progress-bar" id="scroll-progress-bar"></span>
+  </div>
+
   <header class="site-header">
     <a class="site-name" href="#top">권지민</a>
     <nav aria-label="주요 메뉴">
@@ -49,6 +54,7 @@
 
     <!-- 소개: 탭으로 관심사 전환 -->
     <section id="about" class="reveal">
+      <p class="section-index">01 — ABOUT</p>
       <h2>소개</h2>
       <p class="section-note">관심사를 눌러서 제가 어떤 마케터를 지향하는지 확인해 보세요.</p>
 
@@ -102,10 +108,11 @@
 
     <!-- 작업: 클릭하면 펼쳐지는 카드 -->
     <section id="works" class="reveal">
+      <p class="section-index">02 — WORKS</p>
       <h2>작업</h2>
       <p class="section-note">카드를 눌러 자세한 내용을 펼쳐 보세요.</p>
 
-      <ul class="card-list">
+      <ul class="card-list card-list-stack">
         <li class="card">
           <button class="card-head" aria-expanded="false">
             <span class="tag">게임</span>
@@ -158,6 +165,7 @@
 
     <!-- 경험·활동: 클릭하면 펼쳐지는 카드 -->
     <section id="activity" class="reveal">
+      <p class="section-index">03 — ACTIVITY</p>
       <h2>활동</h2>
       <p class="section-note">참여하고 있는 활동을 눌러 자세히 확인해 보세요.</p>
 
@@ -182,6 +190,7 @@
 
     <!-- 기록: 클릭 가능한 타임라인 -->
     <section id="record" class="reveal">
+      <p class="section-index">04 — RECORD</p>
       <h2>기록</h2>
       <p class="section-note">각 단계를 눌러 자세한 이야기를 펼쳐 보세요.</p>
 
@@ -223,6 +232,7 @@
 
     <!-- 생각: Q&A 토글 -->
     <section id="think" class="reveal">
+      <p class="section-index">05 — THINK</p>
       <h2>생각</h2>
       <p class="section-note">스스로에게 던지는 질문이에요. 눌러서 답을 확인해 보세요.</p>
 
@@ -243,6 +253,7 @@
     </section>
 
     <section id="contact" class="reveal">
+      <p class="section-index">06 — CONTACT</p>
       <h2>연락</h2>
       <p>
         브랜드·콘텐츠 마케팅이나 함께할 작업에 대해 이야기하고 싶다면 편하게 연락 주세요.
@@ -255,6 +266,7 @@
 
     <!-- 방명록: Supabase에 저장/조회 -->
     <section id="guestbook" class="reveal">
+      <p class="section-index">07 — GUESTBOOK</p>
       <h2>방명록</h2>
       <p class="section-note">다녀간 흔적을 남겨 주세요. 남겨주신 글은 바로 아래에 쌓입니다.</p>
 

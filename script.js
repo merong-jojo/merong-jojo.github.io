@@ -263,3 +263,69 @@ if ("IntersectionObserver" in window) {
     loadGuestbook();
   }
 })();
+
+// ===== 스크롤 진행 표시줄 + 현재 섹션 메뉴 하이라이트 =====
+(function () {
+  const progressBar = document.getElementById("scroll-progress-bar");
+
+  // 헤더 메뉴의 #앵커 링크만 수집 (href가 "#..."로 시작)
+  const navLinks = Array.from(
+    document.querySelectorAll('.site-header nav a[href^="#"]')
+  );
+
+  // 각 링크가 가리키는 섹션 요소를 매핑
+  const sections = navLinks
+    .map((link) => {
+      const id = link.getAttribute("href").slice(1);
+      const el = id ? document.getElementById(id) : null;
+      return el ? { link, el } : null;
+    })
+    .filter(Boolean);
+
+  function onScroll() {
+    // 1) 진행바: 문서 전체에서 읽은 비율
+    if (progressBar) {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = docHeight > 0 ? scrollTop / docHeight : 0;
+      progressBar.style.width = Math.min(100, Math.max(0, ratio * 100)) + "%";
+    }
+
+    // 2) 현재 섹션 하이라이트: 뷰포트 상단 기준에서 가장 가까운 섹션
+    if (sections.length) {
+      const marker = window.innerHeight * 0.3; // 화면 위쪽 30% 지점을 기준선으로
+      let current = sections[0];
+      for (const s of sections) {
+        if (s.el.getBoundingClientRect().top <= marker) {
+          current = s;
+        }
+      }
+      sections.forEach((s) => {
+        const active = s === current;
+        s.link.classList.toggle("is-current", active);
+        if (active) {
+          s.link.setAttribute("aria-current", "true");
+        } else {
+          s.link.removeAttribute("aria-current");
+        }
+      });
+    }
+  }
+
+  // 스크롤/리사이즈 때마다 갱신 (rAF로 부드럽게)
+  let ticking = false;
+  function requestTick() {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        onScroll();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  window.addEventListener("scroll", requestTick, { passive: true });
+  window.addEventListener("resize", requestTick);
+  onScroll(); // 첫 진입 시 1회 실행
+})();
